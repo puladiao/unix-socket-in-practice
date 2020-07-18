@@ -4,18 +4,19 @@ int main() {
     int socket_fd;
     socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
+    // set server info
     sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(SERVER_PORT);
     inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
 
+    // conenct to server
     socklen_t server_len = sizeof(server_addr);
     int connect_rt = connect(socket_fd, (sockaddr*)&server_addr, server_len);
     if (connect_rt == -1) {
         error(1, errno, "bind error");
     }
-
 
     char send_line[MAX_LINES];
     char recv_line[MAX_LINES + 1];
@@ -40,6 +41,7 @@ int main() {
             error(1, errno, "select error");
         }
 
+        // socket has something to read
         if (FD_ISSET(socket_fd, &readmask)) {
             n = read(socket_fd, recv_line, MAX_LINES);
             if (n < 0) {
@@ -52,14 +54,17 @@ int main() {
             fputs("\n", stdout);
         }
 
+        // stdin has something to read
         if (FD_ISSET(0, &readmask)) {
             if (fgets(send_line, MAX_LINES, stdin) != NULL) {
                 if (strncmp(send_line, "shutdown", 8) == 0) {
+                    // shutdown
                     FD_CLR(0, &allreads);
                     if (shutdown(socket_fd, SHUT_WR)) {
                         error(1, errno, "shutdown failed");
                     }
                 } else if (strncmp(send_line, "close", 5) == 0) {
+                    // close
                     FD_CLR(0, &allreads);
                     if (close(socket_fd)) {
                         error(1, errno, "close failed");
@@ -67,6 +72,7 @@ int main() {
                     sleep(6);
                     exit(0);
                 } else {
+                    // normal send
                     int i = strlen(send_line);
                     if (send_line[i - 1] == '\n') {
                         send_line[i - 1] = 0;
