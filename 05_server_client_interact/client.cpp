@@ -1,6 +1,6 @@
 #include "common.h"
 
-#define MESSAGE_SIZE 102400
+#define MESSAGE_SIZE 102401
 
 void send_data(int sockfd) {
     char *query;
