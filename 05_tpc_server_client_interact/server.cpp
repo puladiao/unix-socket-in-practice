@@ -15,7 +15,7 @@ void read_data(int accepted_sock_fd) {
 
         time++;
         printf("1K read for %d bytes[%d]\n", time, ret);
-        usleep(1000);
+        usleep(100000);
     }
 }
 
