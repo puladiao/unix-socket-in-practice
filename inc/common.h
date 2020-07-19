@@ -34,3 +34,17 @@
 #define MAX_LINES 1000
 
 int readn(int fd, char* buffer, size_t size);
+
+typedef struct { 
+    u_int32_t type; 
+    char data[1024]; 
+} messageObject;
+
+#define MSG_PING 1
+#define MSG_PONG 2
+#define MSG_TYPE1 11
+#define MSG_TYPE2 21
+
+#define KEEP_ALIVE_TIME 10
+#define KEEP_ALIVE_INTERVAL 3
+#define KEEP_ALIVE_PROBETIMES 3
