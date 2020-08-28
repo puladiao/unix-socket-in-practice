@@ -51,7 +51,7 @@ int main() {
             }
 
             printf("ready number %d\n", ready_number);
-            // listen fd process complete
+            // all listening fd are processed
             if (--ready_number <= 0) {
                 continue;
             }
@@ -64,6 +64,7 @@ int main() {
                 continue;
             }
 
+            // revents: return value. don't mistake with event which is input
             if (event_set[i].revents & (POLLRDNORM | POLLERR)) {
                 // read client request and response
                 if ((n = read(socket_fd, buf, MAX_LINES)) > 0) {
