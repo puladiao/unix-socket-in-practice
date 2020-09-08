@@ -34,6 +34,9 @@
 // waitpid
 #include <sys/wait.h>
 
+// pthread
+#include <pthread.h>
+
 #define SERVER_PORT 12345
 // maximum length for the queue of pending connections
 #define MAX_LEN_QUEUE_PENDING_CONN 1000
@@ -56,6 +59,9 @@ typedef struct {
 #define KEEP_ALIVE_PROBETIMES 3
 
 #define POLL_SIZE 1024
+
+#define BLOCK_QUEUE_SIZE 100
+#define THREAD_NUMBER 10
 
 int tcp_server_listen(int port) {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
